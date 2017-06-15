@@ -1,0 +1,6 @@
+framework module Pods_Resolver {
+  umbrella header "Pods-Resolver-umbrella.h"
+
+  export *
+  module * { export * }
+}
