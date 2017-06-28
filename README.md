@@ -2,14 +2,16 @@
 Dependency injection framework for Swift.
 
 ## Usage
-```
+```swift
 container.register { MyService() as Service }
 ...
 let service: Service = container.resolve()
 ```
 
 ## Instalation
-`pod 'SwiftResolver'`
+```ruby
+pod 'SwiftResolver'
+```
 
 ## Improvements
 - Use Mirror type to register all implemented protocols of a given type
