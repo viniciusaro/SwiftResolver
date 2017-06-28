@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "SwiftResolver"
-  s.version          = "1.0.1"
+  s.version          = "1.0.2"
   s.summary          = "Dependency injection framework for Swift."
 
   s.description      = <<-DESC
@@ -9,10 +9,10 @@ Pod::Spec.new do |s|
                         achieve that in an organized way.
                         DESC
 
-  s.homepage         = "https://github.com/99Taxis/SwiftResolver"
+  s.homepage         = "https://github.com/viniciusaro/SwiftResolver"
   s.license          = 'MIT'
   s.authors          = { "Vinicius Rodrigues" => "vinicius.a.ro@gmail.com" }
-  s.source           = { :git => "https://github.com/99Taxis/SwiftResolver.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/viniciusaro/SwiftResolver.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/vinizzera'
 
   s.ios.deployment_target = '8.0'
