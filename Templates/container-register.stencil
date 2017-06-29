@@ -1,0 +1,36 @@
+import SwiftResolver
+let globalContainer = Container()
+
+func build() {
+    {% for type in types.all|annotated:"AutoRegister" %}
+    {% for conformingType in type.based %}
+    {% for instanceMethod in type.initializers %}
+    globalContainer.register { {{ type.name }}({% for parameter in instanceMethod.parameters %}{% if forloop.counter == 1 %}{{ parameter.name }}:$0{% elif forloop.counter == 2 %}{{ parameter.name }}:$1{% elif forloop.counter == 3 %}{{ parameter.name }}:$2{% elif forloop.counter == 4 %}{{ parameter.name }}:$3{% elif forloop.counter == 5 %}{{ parameter.name }}:$4{% endif %}{% if forloop.last %}{% else %},{% endif %}{% endfor %}) as {{ conformingType }} }
+    {% endfor %}
+    {% endfor %}
+    {% endfor %}
+    {#
+    {% for type in types.all %}
+    {% for conformingType in type.based %}
+    globalContainer.register { {{ type.name }}() as {{ conformingType }} }
+    {% for instanceMethod in type.instanceMethods %}
+    globalContainer.register { {{ type.name }}(
+    {% for parameter in instanceMethod.parameters %}
+    {% if forloop.counter == 1 %}
+    {{ parameter.name }}:$0
+    {% elif forloop.counter == 2 %}
+    {{ parameter.name }}:$1
+    {% elif forloop.counter == 3 %}
+    {{ parameter.name }}:$2
+    {% elif forloop.counter == 4 %}
+    {{ parameter.name }}:$3
+    {% elif forloop.counter == 5 %}
+    {{ parameter.name }}:$4
+    {% endif %}
+    {% if forloop.last %}{% else %},{% endif %}
+    {% endfor %}) as {{ conformingType }} }
+    {% endfor %}
+    {% endfor %}
+    {% endfor %}
+    #}
+}
