@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		5999A1BD666812057B6E2827 /* Pods_SwiftResolverTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEB58DF8DAA83C3C88139B88 /* Pods_SwiftResolverTests.framework */; };
+		81162D211F05623C00EC3D79 /* swiftresolver.sh in Resources */ = {isa = PBXBuildFile; fileRef = 81162D201F05623C00EC3D79 /* swiftresolver.sh */; };
+		81162D241F05624800EC3D79 /* container-register.stencil in Resources */ = {isa = PBXBuildFile; fileRef = 81162D231F05624800EC3D79 /* container-register.stencil */; };
 		811CFA841F0352FC005521A7 /* ContainerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811CFA811F0352FC005521A7 /* ContainerFactory.swift */; };
 		811CFA851F0352FC005521A7 /* ContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811CFA821F0352FC005521A7 /* ContainerTests.swift */; };
 		818B1ECC1EF2D4E8005F4434 /* SwiftResolver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 818B1EC21EF2D4E8005F4434 /* SwiftResolver.framework */; };
@@ -38,6 +40,8 @@
 		2E00CD1739740848F7746922 /* Pods-ResolverTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResolverTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ResolverTests/Pods-ResolverTests.debug.xcconfig"; sourceTree = "<group>"; };
 		597E339A77FA2AE5407B7FBD /* Pods_SwiftResolver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftResolver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CC65F404B89B5AD2378C71F /* Pods-SwiftResolver.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftResolver.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftResolver/Pods-SwiftResolver.debug.xcconfig"; sourceTree = "<group>"; };
+		81162D201F05623C00EC3D79 /* swiftresolver.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = swiftresolver.sh; sourceTree = "<group>"; };
+		81162D231F05624800EC3D79 /* container-register.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "container-register.stencil"; sourceTree = "<group>"; };
 		811CFA811F0352FC005521A7 /* ContainerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerFactory.swift; sourceTree = "<group>"; };
 		811CFA821F0352FC005521A7 /* ContainerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerTests.swift; sourceTree = "<group>"; };
 		811CFA831F0352FC005521A7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -80,6 +84,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		81162D1F1F05623C00EC3D79 /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				81162D201F05623C00EC3D79 /* swiftresolver.sh */,
+			);
+			path = Scripts;
+			sourceTree = "<group>";
+		};
+		81162D221F05624800EC3D79 /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				81162D231F05624800EC3D79 /* container-register.stencil */,
+			);
+			path = Templates;
+			sourceTree = "<group>";
+		};
 		811CFA801F0352FC005521A7 /* SwiftResolverTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -93,12 +113,14 @@
 		818B1EB81EF2D4E8005F4434 = {
 			isa = PBXGroup;
 			children = (
-				818B1EDD1EF2D58B005F4434 /* Resources */,
-				818B1EDC1EF2D58B005F4434 /* Sources */,
-				811CFA801F0352FC005521A7 /* SwiftResolverTests */,
 				A590733809B5EA4955B123DB /* Frameworks */,
 				8E336B9179BD3B603464F28A /* Pods */,
 				818B1EC31EF2D4E8005F4434 /* Products */,
+				818B1EDD1EF2D58B005F4434 /* Resources */,
+				81162D1F1F05623C00EC3D79 /* Scripts */,
+				818B1EDC1EF2D58B005F4434 /* Sources */,
+				811CFA801F0352FC005521A7 /* SwiftResolverTests */,
+				81162D221F05624800EC3D79 /* Templates */,
 			);
 			sourceTree = "<group>";
 		};
@@ -257,6 +279,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81162D211F05623C00EC3D79 /* swiftresolver.sh in Resources */,
+				81162D241F05624800EC3D79 /* container-register.stencil in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
