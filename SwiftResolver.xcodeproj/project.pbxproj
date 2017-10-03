@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5999A1BD666812057B6E2827 /* Pods_SwiftResolverTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEB58DF8DAA83C3C88139B88 /* Pods_SwiftResolverTests.framework */; };
+		6308CF681F83C48A00CF2814 /* inject.stencil in Resources */ = {isa = PBXBuildFile; fileRef = 6308CF671F83C48A00CF2814 /* inject.stencil */; };
 		81162D211F05623C00EC3D79 /* swiftresolver.sh in Resources */ = {isa = PBXBuildFile; fileRef = 81162D201F05623C00EC3D79 /* swiftresolver.sh */; };
 		81162D241F05624800EC3D79 /* container-register.stencil in Resources */ = {isa = PBXBuildFile; fileRef = 81162D231F05624800EC3D79 /* container-register.stencil */; };
 		811CFA841F0352FC005521A7 /* ContainerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811CFA811F0352FC005521A7 /* ContainerFactory.swift */; };
@@ -39,6 +40,7 @@
 		2A7C3056E7F2D9B752452ADA /* Pods-Resolver.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Resolver.release.xcconfig"; path = "Pods/Target Support Files/Pods-Resolver/Pods-Resolver.release.xcconfig"; sourceTree = "<group>"; };
 		2E00CD1739740848F7746922 /* Pods-ResolverTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResolverTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ResolverTests/Pods-ResolverTests.debug.xcconfig"; sourceTree = "<group>"; };
 		597E339A77FA2AE5407B7FBD /* Pods_SwiftResolver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftResolver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6308CF671F83C48A00CF2814 /* inject.stencil */ = {isa = PBXFileReference; lastKnownFileType = text; path = inject.stencil; sourceTree = "<group>"; };
 		7CC65F404B89B5AD2378C71F /* Pods-SwiftResolver.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftResolver.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftResolver/Pods-SwiftResolver.debug.xcconfig"; sourceTree = "<group>"; };
 		81162D201F05623C00EC3D79 /* swiftresolver.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = swiftresolver.sh; sourceTree = "<group>"; };
 		81162D231F05624800EC3D79 /* container-register.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "container-register.stencil"; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				81162D231F05624800EC3D79 /* container-register.stencil */,
+				6308CF671F83C48A00CF2814 /* inject.stencil */,
 			);
 			path = Templates;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 			files = (
 				81162D211F05623C00EC3D79 /* swiftresolver.sh in Resources */,
 				81162D241F05624800EC3D79 /* container-register.stencil in Resources */,
+				6308CF681F83C48A00CF2814 /* inject.stencil in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,0 +1,21 @@
+protocol Injectable {}
+
+{% for type in types.based.Injectable|class %}
+extension {{type.name}} {
+    convenience init({% for variable in type.variables|instance|!annotated:"inject" %}{{variable.name}}: {{variable.typeName}}{% if not forloop.last %}, {% endif %}{% endfor %}) {
+        {% for variable in type.variables|instance|stored|annotated:"inject" %}
+        let {{variable.name}}: {{variable.typeName}} = resolve()
+        {% endfor %}
+        self.init({% for variable in type.variables %}{{variable.name}}: {{variable.name}}{% if not forloop.last %}, {% endif %}{% endfor %})
+    }
+} {% endfor %}
+
+{% for type in types.based.Injectable|struct %}
+extension {{type.name}} {
+    init({% for variable in type.variables|instance|!annotated:"inject" %}{{variable.name}}: {{variable.typeName}}{% if not forloop.last %}, {% endif %}{% endfor %}) {
+        {% for variable in type.variables|instance|stored|annotated:"inject" %}
+        let {{variable.name}}: {{variable.typeName}} = resolve()
+        {% endfor %}
+        self.init({% for variable in type.variables %}{{variable.name}}: {{variable.name}}{% if not forloop.last %}, {% endif %}{% endfor %})
+    }
+} {% endfor %}
