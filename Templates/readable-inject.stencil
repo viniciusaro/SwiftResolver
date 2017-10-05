@@ -3,7 +3,7 @@
 {% macro addParamIfNotInjected type param isLast %}
 	{% set annotatedVariables %}{{type.variables|annotated:"inject"}}{% endset %}
 	{% if annotatedVariables|!contains:param.name %}
-		{{param.name}}:{{param.typeName}}{% if not isLast %}, {% endif %}
+		{{param.name}}: {{param.typeName}}{% if not isLast %}, {% endif %}
 	{% endif %}
 {% endmacro %}
 

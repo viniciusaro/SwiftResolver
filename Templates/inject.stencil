@@ -1,11 +1,12 @@
 // swiftlint:disable trailing_newline
+// swiftlint:disable line_length
 
 protocol Injectable {}
 
 {% for type in types.based.Injectable|class %}
 extension {{type.name}} {
 	{% for initializer in type.initializers %}
-	convenience init({% for param in initializer.parameters %}{% set annotatedVariables %}{{type.variables|annotated:"inject"}}{% endset %}{% if annotatedVariables|!contains:param.name %}{{param.name}}:{{param.typeName}}{% if not forloop.last %}, {% endif %}{% endif %}{% endfor %}) {
+	convenience init({% for param in initializer.parameters %}{% set annotatedVariables %}{{type.variables|annotated:"inject"}}{% endset %}{% if annotatedVariables|!contains:param.name %}{{param.name}}: {{param.typeName}}{% if not forloop.last %}, {% endif %}{% endif %}{% endfor %}) {
 		{% for variable in type.variables|annotated:"inject" %}
        	let {{variable.name}}: {{variable.typeName}} = resolve()
        	{% endfor %}
@@ -18,7 +19,7 @@ extension {{type.name}} {
 {% for type in types.based.Injectable|enum %}
 extension {{type.name}} {
 	{% for initializer in type.initializers %}
-	convenience init({% for param in initializer.parameters %}{% set annotatedVariables %}{{type.variables|annotated:"inject"}}{% endset %}{% if annotatedVariables|!contains:param.name %}{{param.name}}:{{param.typeName}}{% if not forloop.last %}, {% endif %}{% endif %}{% endfor %}) {
+	init({% for param in initializer.parameters %}{% set annotatedVariables %}{{type.variables|annotated:"inject"}}{% endset %}{% if annotatedVariables|!contains:param.name %}{{param.name}}: {{param.typeName}}{% if not forloop.last %}, {% endif %}{% endif %}{% endfor %}) {
 		{% for variable in type.variables|annotated:"inject" %}
        	let {{variable.name}}: {{variable.typeName}} = resolve()
        	{% endfor %}
