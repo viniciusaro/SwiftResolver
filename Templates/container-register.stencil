@@ -1,12 +1,16 @@
 import SwiftResolver
-let globalContainer = Container()
 
-func build() {
+// swiftlint:disable line_length
+// swiftlint:disable trailing_newline
+func autoregister(container: Container) {
     {% for type in types.all|annotated:"AutoRegister" %}
-    {% for conformingType in type.based %}
+    {% if type.annotations.AutoRegister %}
     {% for initializer in type.initializers %}
-    globalContainer.register { {{ type.name }}({% for parameter in initializer.parameters %}{% if forloop.counter == 1 %}{{ parameter.name }}:$0{% elif forloop.counter == 2 %}{{ parameter.name }}:$1{% elif forloop.counter == 3 %}{{ parameter.name }}:$2{% elif forloop.counter == 4 %}{{ parameter.name }}:$3{% elif forloop.counter == 5 %}{{ parameter.name }}:$4{% endif %}{% if forloop.last %}{% else %},{% endif %}{% endfor %}) as {{ conformingType }} }
+
+    container.register{% if type.annotations.scope %}(scope: {{type.annotations.scope}}){% endif %} { {{ type.name }}({% for parameter in initializer.parameters %}{% if forloop.counter == 1 %}{{ parameter.name }}:$0{% elif forloop.counter == 2 %}{{ parameter.name }}:$1{% elif forloop.counter == 3 %}{{ parameter.name }}:$2{% elif forloop.counter == 4 %}{{ parameter.name }}:$3{% elif forloop.counter == 5 %}{{ parameter.name }}:$4{% endif %}{% if forloop.last %}{% else %}, {% endif %}{% endfor %}) as {% if type.annotations.AutoRegister == 1 %}{{type.name}}Type{% else %} {{ type.annotations.AutoRegister }}{% endif %} }
     {% endfor %}
-    {% endfor %}
+    {% endif %}
     {% endfor %}
 }
+// swiftlint:enable line_length
+// swiftlint:enable trailing_newline
