@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "container:/Users/vinicius/Documents/Projects/Resolver/SwiftResolver.xcodeproj">
+      location = "group:SwiftResolver.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
