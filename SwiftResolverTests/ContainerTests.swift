@@ -26,7 +26,7 @@ class ContainerTests: QuickSpec {
             it("with 0...5 dependencies") {
                 container.register(Object0.init)
                 container.register(Object1.init)
-                container.register(Object2.init)
+                container.register { Object2(dependency: $0, dependency2: $1) }
                 container.register(Object3.init)
                 container.register(Object4.init)
                 container.register(Object5.init)
@@ -126,3 +126,4 @@ class ContainerTests: QuickSpec {
         }
     }
 }
+
