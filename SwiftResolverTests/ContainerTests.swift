@@ -2,6 +2,22 @@ import Quick
 import Nimble
 @testable import SwiftResolver
 
+protocol Animal {
+    func makeSound()
+}
+
+final class Cat: Animal {
+    func makeSound() {
+        print("Gato")
+    }
+}
+
+final class Dog: Animal {
+    func makeSound() {
+        print("Cachoro")
+    }
+}
+
 class ContainerTests: QuickSpec {
     override func spec() {
         describe("when deallocating") {
@@ -16,6 +32,28 @@ class ContainerTests: QuickSpec {
                 _ = container.resolve() as Object2
                 container = nil
                 expect(weakContainer).to(beNil())
+            }
+        }
+        describe("when registering multiple instances of the same type") {
+            var container: Container!
+            beforeEach {
+                container = Container()
+            }
+            it("should resolve generic type") {
+                container.register(Dog.init).as(Animal.self)
+                let animal: Animal = container.resolve()
+                expect(animal).to(beAKindOf(Dog.self))
+            }
+            it("should resolve specific type") {
+                container.register(Dog.init).as(Animal.self)
+                let animal: Dog = container.resolve()
+                expect(animal).to(beAKindOf(Dog.self))
+            }
+            it("should resolve with specific type as parameter") {
+                container.register(Cat.init).as(Animal.self)
+                container.register(Dog.init).as(Animal.self)
+                let animal: Animal = container.resolve(Dog.self)
+                expect(animal).to(beAKindOf(Dog.self))
             }
         }
         describe("when registering types") {
@@ -50,7 +88,7 @@ class ContainerTests: QuickSpec {
                 let obj3: Object3 = container.resolve()
                 let obj4: Object4 = container.resolve()
                 let obj5: Object5 = container.resolve()
-                
+
                 expect(obj0).to(beAKindOf(Object0.self))
                 expect(obj1).to(beAKindOf(Object1.self))
                 expect(obj2).to(beAKindOf(Object2.self))
@@ -76,11 +114,11 @@ class ContainerTests: QuickSpec {
                     container.register(Object0.init)
                     container.register(Object1.init)
                     container.register(Object2.init)
-                    
+
                     _ = container.resolve() as Object0
                     _ = container.resolve() as Object1
                     _ = container.resolve() as Object2
-                    
+
                     expect(container.instanceCountFor(Object0.self)).to(equal(4))
                 }
             }
@@ -92,19 +130,19 @@ class ContainerTests: QuickSpec {
                     container.register(scope: .shared, Object0.init)
                     container.register(Object1.init)
                     container.register(Object2.init)
-                    
+
                     _ = container.resolve() as Object2
-                    
+
                     expect(container.instanceCountFor(Object0.self)).to(equal(1))
                 }
                 it("should use create new instances for different trees") {
                     container.register(scope: .shared, Object0.init)
                     container.register(Object1.init)
                     container.register(Object2.init)
-                    
+
                     _ = container.resolve() as Object2
                     _ = container.resolve() as Object2
-                    
+
                     expect(container.instanceCountFor(Object0.self)).to(equal(2))
                 }
             }
@@ -116,10 +154,10 @@ class ContainerTests: QuickSpec {
                     container.register(scope: .singleton, Object0.init)
                     container.register(Object1.init)
                     container.register(Object2.init)
-                    
+
                     _ = container.resolve() as Object2
                     _ = container.resolve() as Object2
-                    
+
                     expect(container.instanceCountFor(Object0.self)).to(equal(1))
                 }
             }
