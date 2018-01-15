@@ -16,59 +16,77 @@ final public class Container {
     
     public init() {}
     
-    public func register<T>(scope: Scope = .instance, _ builder: @escaping Builder0<T>) {
+    @discardableResult
+    public func register<T>(scope: Scope = .instance, _ builder: @escaping Builder0<T>) -> TypeSpecifier {
         let factory = Factory<T>(scope: scope, builder: builder)
-        self.pool.register(factory)
+        return self.pool.register(factory)
     }
     
-    public func register<T, A>(scope: Scope = .instance, _ builder: @escaping Builder1<T, A>) {
+    @discardableResult
+    public func register<T, A>(scope: Scope = .instance, _ builder: @escaping Builder1<T, A>) -> TypeSpecifier {
         let factory = Factory<T>(scope: scope) { [unowned self] in
             return try builder((self.pool.instance()))
         }
-        self.pool.register(factory)
+        return self.pool.register(factory)
     }
     
-    public func register<T, A, B>(scope: Scope = .instance, _ builder: @escaping Builder2<T, A, B>) {
+    @discardableResult
+    public func register<T, A, B>(scope: Scope = .instance, _ builder: @escaping Builder2<T, A, B>) -> TypeSpecifier {
         let factory = Factory<T>(scope: scope) { [unowned self] in
             return try builder((self.pool.instance(),
-                               self.pool.instance()))
+                                self.pool.instance()))
         }
-        self.pool.register(factory)
+        return self.pool.register(factory)
     }
     
-    public func register<T, A, B, C>(scope: Scope = .instance, _ builder: @escaping Builder3<T, A, B, C>) {
+    @discardableResult
+    public func register<T, A, B, C>(scope: Scope = .instance, _ builder: @escaping Builder3<T, A, B, C>) -> TypeSpecifier {
         let factory = Factory<T>(scope: scope) { [unowned self] in
             return try builder((self.pool.instance(),
-                               self.pool.instance(),
-                               self.pool.instance()))
+                                self.pool.instance(),
+                                self.pool.instance()))
         }
-        self.pool.register(factory)
+        return self.pool.register(factory)
     }
     
-    public func register<T, A, B, C, D>(scope: Scope = .instance, _ builder: @escaping Builder4<T, A, B, C, D>) {
+    @discardableResult
+    public func register<T, A, B, C, D>(scope: Scope = .instance, _ builder: @escaping Builder4<T, A, B, C, D>) -> TypeSpecifier {
         let factory = Factory<T>(scope: scope) { [unowned self] in
             return try builder((self.pool.instance(),
-                               self.pool.instance(),
-                               self.pool.instance(),
-                               self.pool.instance()))
+                                self.pool.instance(),
+                                self.pool.instance(),
+                                self.pool.instance()))
         }
-        self.pool.register(factory)
+        return self.pool.register(factory)
     }
     
-    public func register<T, A, B, C, D, E>(scope: Scope = .instance, _ builder: @escaping Builder5<T, A, B, C, D, E>) {
+    @discardableResult
+    public func register<T, A, B, C, D, E>(scope: Scope = .instance, _ builder: @escaping Builder5<T, A, B, C, D, E>) -> TypeSpecifier {
         let factory = Factory<T>(scope: scope) { [unowned self] in
             return try builder((self.pool.instance(),
-                               self.pool.instance(),
-                               self.pool.instance(),
-                               self.pool.instance(),
-                               self.pool.instance()))
+                                self.pool.instance(),
+                                self.pool.instance(),
+                                self.pool.instance(),
+                                self.pool.instance()))
         }
-        self.pool.register(factory)
+        return self.pool.register(factory)
     }
     
     public func resolve<T>() -> T {
         do {
             let instance = try self.pool.instance() as T
+            self.pool.clearShared()
+            return instance
+        } catch let error as ContainerError<T> {
+            fatalError(error.localizedDescription)
+        } catch {
+            fatalError()
+        }
+    }
+    
+    public func resolve<T, Specifier>(_ specificType: Specifier) -> T {
+        do {
+            let instance = try self.pool.instance(specificType) as T
             self.pool.clearShared()
             return instance
         } catch let error as ContainerError<T> {
