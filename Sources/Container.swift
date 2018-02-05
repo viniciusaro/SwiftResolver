@@ -12,7 +12,7 @@ final public class Container {
     public typealias Builder4<T, A, B, C, D> = ((A, B, C, D)) -> T
     public typealias Builder5<T, A, B, C, D, E> = ((A, B, C, D, E)) -> T
     
-    private var pool = DependencyPool()
+    private let pool = DependencyPool()
     
     public init() {}
     
@@ -73,26 +73,30 @@ final public class Container {
     }
     
     public func resolve<T>() -> T {
-        do {
-            let instance = try self.pool.instance() as T
-            self.pool.clearShared()
-            return instance
-        } catch let error as ContainerError<T> {
-            fatalError(error.localizedDescription)
-        } catch {
-            fatalError()
-        }
+        return self.resolve { try self.pool.instance() }
     }
     
     public func resolve<T, Specifier>(_ specificType: Specifier) -> T {
+        return self.resolve { try self.pool.instance(specificType) }
+    }
+    
+    public func resolve<T>(_ tag: String) -> T {
+        return self.resolve { try self.pool.instance(tag: tag) }
+    }
+    
+    public func resolve<T, StringRepresentable: RawRepresentable>(_ tag: StringRepresentable) -> T where StringRepresentable.RawValue == String {
+        return self.resolve { try self.pool.instance(tag: tag.rawValue) }
+    }
+    
+    private func resolve<T>(_ resolverMethod: () throws -> T) -> T {
         do {
-            let instance = try self.pool.instance(specificType) as T
+            let instance = try resolverMethod() as T
             self.pool.clearShared()
             return instance
         } catch let error as ContainerError<T> {
             fatalError(error.localizedDescription)
         } catch {
-            fatalError()
+            fatalError("Unregistered type \(T.self)")
         }
     }
     

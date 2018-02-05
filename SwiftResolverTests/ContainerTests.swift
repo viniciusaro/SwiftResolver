@@ -13,9 +13,21 @@ final class Cat: Animal {
 }
 
 final class Dog: Animal {
+    var name: String = ""
     func makeSound() {
         print("Cachoro")
     }
+    
+    static func with(name: String) -> Dog {
+        let dog = Dog()
+        dog.name = name
+        return dog
+    }
+}
+
+enum Dogs: String {
+    case teo
+    case bob
 }
 
 class ContainerTests: QuickSpec {
@@ -32,6 +44,20 @@ class ContainerTests: QuickSpec {
                 _ = container.resolve() as Object2
                 container = nil
                 expect(weakContainer).to(beNil())
+            }
+        }
+        fdescribe("when registering with tags") {
+            var container: Container!
+            beforeEach {
+                container = Container()
+            }
+            it("should resolve same time with different tags") {
+                container.register { Dog.with(name: "Téo") }.tag(Dogs.teo)
+                container.register { Dog.with(name: "Bob") }.tag(Dogs.bob)
+                let teo = container.resolve(Dogs.teo) as Dog
+                let bob = container.resolve(Dogs.bob) as Dog
+                expect(teo.name).to(equal("Téo"))
+                expect(bob.name).to(equal("Bob"))
             }
         }
         describe("when registering multiple instances of the same type") {

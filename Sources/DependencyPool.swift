@@ -1,7 +1,8 @@
 final class DependencyPool {
-    fileprivate var factories: [String: AnyFactory] = [:]
-    fileprivate var sharedInstances = InstancePool()
-    fileprivate var singletonInstances = InstancePool()
+    private var factories: [String: AnyFactory] = [:]
+    private var sharedInstances = InstancePool()
+    private var singletonInstances = InstancePool()
+    
     
     func sharedInstance<T>() -> T? {
         return self.sharedInstances.get()
@@ -56,17 +57,23 @@ extension DependencyPool {
 extension DependencyPool {
     func instance<T>() throws -> T {
         let identifier = String(describing: T.self).withoutTypeExtension
-        return try self.instance(identifier)
+        return try self.instance(identifier: identifier)
+    }
+    
+    func instance<T>(tag: String) throws -> T {
+        let elementType = String(describing: T.self).withoutTypeExtension
+        let identifier = elementType + tag
+        return try self.instance(identifier: identifier)
     }
     
     func instance<GenericType, ImplementationType>(_ elementType: ImplementationType) throws -> GenericType {
         let elementTypeIdentifier = String(describing: ImplementationType.self).withoutTypeExtension
         let typeSpecificIdentifier = String(describing: GenericType.self).withoutTypeExtension
         let identifier = elementTypeIdentifier + typeSpecificIdentifier
-        return try self.instance(identifier)
+        return try self.instance(identifier: identifier)
     }
     
-    private func instance<T>(_ identifier: String) throws -> T {
+    private func instance<T>(identifier: String) throws -> T {
         guard let factory = self.factories[identifier],
             let element = try factory.resolve(pool: self) as? T else {
                 throw ContainerError.unregisteredValue(T.self)
