@@ -1,0 +1,16 @@
+PODS:
+  - SwiftResolver (1.0.8)
+
+DEPENDENCIES:
+  - SwiftResolver (from `../..`)
+
+EXTERNAL SOURCES:
+  SwiftResolver:
+    :path: ../..
+
+SPEC CHECKSUMS:
+  SwiftResolver: 1214ca04d2c0667d63559f878a0b2d3511c1309e
+
+PODFILE CHECKSUM: 346fb8736263e61765b59f59cbd1928392f1a312
+
+COCOAPODS: 1.4.0
