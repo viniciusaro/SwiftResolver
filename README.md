@@ -8,6 +8,8 @@ container.register { MyService() as Service }
 let service: Service = container.resolve()
 ```
 
+You can find more detailed use cases in the [wiki](https://github.com/viniciusaro/SwiftResolver/wiki) page
+
 ## Instalation
 ```ruby
 pod 'SwiftResolver'
@@ -32,8 +34,8 @@ Later, when resolving, an identifier of the implementation can be passed as para
 
 ```swift
 enum MyServices: String {
-  case mock
-  case live
+    case mock
+    case live
 }
 
 container.register { MyService(requestProvider: liveRequestProvider) }.tag(MyServices.live)
