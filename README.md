@@ -44,6 +44,14 @@ container.register { MyService(requestProvider: mockRequestProvider) }.tag(MySer
 let service: Service = container.resolve(MyServices.live)
 ```
 
+## Thread Safety
+
+SwiftResolver is thread safe. This means you can register/resolve in different threads. 
+
+However, this is not a good practice since resolving instances that are not registered yet results in a `fatalError`.
+
+Using an AppContainer as described in the [wiki](https://github.com/viniciusaro/SwiftResolver/wiki/Project-Setup) page is a more reliable setup.
+
 ## References
 * [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection)
 * [Dip](https://github.com/AliSoftware/Dip)

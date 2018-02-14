@@ -46,7 +46,7 @@ class ContainerTests: QuickSpec {
                 expect(weakContainer).to(beNil())
             }
         }
-        fdescribe("when registering with tags") {
+        describe("when registering with tags") {
             var container: Container!
             beforeEach {
                 container = Container()

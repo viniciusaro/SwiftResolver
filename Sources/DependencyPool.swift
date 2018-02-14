@@ -1,8 +1,7 @@
 final class DependencyPool {
-    private var factories: [String: AnyFactory] = [:]
+    private var factories: Atomic<[String: AnyFactory]> = Atomic([:])
     private var sharedInstances = InstancePool()
     private var singletonInstances = InstancePool()
-    
     
     func sharedInstance<T>() -> T? {
         return self.sharedInstances.get()
@@ -26,7 +25,7 @@ final class DependencyPool {
     
     func instanceCountFor<T>(type: T.Type) -> Int {
         let identifier = String(describing: T.self)
-        guard let factory = self.factories[identifier] else {
+        guard let factory = self.factories.value[identifier] else {
             return 0
         }
         return factory.instanceCount
@@ -47,9 +46,9 @@ extension DependencyPool {
         let typeSpecificIdentifier = specificIdentifier.withoutTypeExtension
         let identifier = elementTypeIdentifier + typeSpecificIdentifier
         
-        self.factories[identifier] = factory.asAny()
+        self.factories.mutate { $0[identifier] = factory.asAny() }
         if typeSpecificIdentifier.count > 0 {
-            self.factories[typeSpecificIdentifier] = factory.asAny()
+            self.factories.mutate { $0[typeSpecificIdentifier] = factory.asAny() }
         }
     }
 }
@@ -74,7 +73,7 @@ extension DependencyPool {
     }
     
     private func instance<T>(identifier: String) throws -> T {
-        guard let factory = self.factories[identifier],
+        guard let factory = self.factories.value[identifier],
             let element = try factory.resolve(pool: self) as? T else {
                 throw ContainerError.unregisteredValue(T.self)
         }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5999A1BD666812057B6E2827 /* Pods_SwiftResolverTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEB58DF8DAA83C3C88139B88 /* Pods_SwiftResolverTests.framework */; };
+		636820292034BA6100532132 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636820282034BA6100532132 /* Atomic.swift */; };
 		63B2D781200D0C36001E5AB8 /* String+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B2D780200D0C36001E5AB8 /* String+Helpers.swift */; };
 		63B2D783200D16FA001E5AB8 /* TypeSpecifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B2D782200D16FA001E5AB8 /* TypeSpecifier.swift */; };
 		811CFA841F0352FC005521A7 /* ContainerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811CFA811F0352FC005521A7 /* ContainerFactory.swift */; };
@@ -39,6 +40,7 @@
 		2A7C3056E7F2D9B752452ADA /* Pods-Resolver.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Resolver.release.xcconfig"; path = "Pods/Target Support Files/Pods-Resolver/Pods-Resolver.release.xcconfig"; sourceTree = "<group>"; };
 		2E00CD1739740848F7746922 /* Pods-ResolverTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResolverTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ResolverTests/Pods-ResolverTests.debug.xcconfig"; sourceTree = "<group>"; };
 		597E339A77FA2AE5407B7FBD /* Pods_SwiftResolver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftResolver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		636820282034BA6100532132 /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
 		63B2D780200D0C36001E5AB8 /* String+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Helpers.swift"; sourceTree = "<group>"; };
 		63B2D782200D16FA001E5AB8 /* TypeSpecifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeSpecifier.swift; sourceTree = "<group>"; };
 		7CC65F404B89B5AD2378C71F /* Pods-SwiftResolver.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftResolver.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftResolver/Pods-SwiftResolver.debug.xcconfig"; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 		818B1EDC1EF2D58B005F4434 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				636820282034BA6100532132 /* Atomic.swift */,
 				818B1EF21EF2D5F0005F4434 /* Container.swift */,
 				818B1EF31EF2D5F0005F4434 /* ContainerError.swift */,
 				818B1EEF1EF2D5F0005F4434 /* DependencyPool.swift */,
@@ -370,6 +373,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				818B1EF81EF2E2FA005F4434 /* Container.swift in Sources */,
+				636820292034BA6100532132 /* Atomic.swift in Sources */,
 				818B1EF91EF2E2FA005F4434 /* ContainerError.swift in Sources */,
 				63B2D783200D16FA001E5AB8 /* TypeSpecifier.swift in Sources */,
 				818B1EFA1EF2E2FA005F4434 /* DependencyPool.swift in Sources */,
