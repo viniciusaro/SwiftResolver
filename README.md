@@ -38,8 +38,8 @@ enum MyServices: String {
     case live
 }
 
-container.register { MyService(requestProvider: liveRequestProvider) }.tag(MyServices.live)
-container.register { MyService(requestProvider: mockRequestProvider) }.tag(MyServices.mock)
+container.register { MyService(requestProvider: liveRequestProvider) as Service }.tag(MyServices.live)
+container.register { MyService(requestProvider: mockRequestProvider) as Service }.tag(MyServices.mock)
 ...
 let service: Service = container.resolve(MyServices.live)
 ```
