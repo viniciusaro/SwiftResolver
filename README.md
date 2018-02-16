@@ -30,7 +30,7 @@ let service: ServiceProtocol = container.resolve(MyService.self) // instance of 
 ## Multiple Configurations
 
 You can register multiple implementations of the same object with different configurations.
-Later, when resolving, an identifier of the implementation can be passed as parameter to obtain the correct implementation type.
+Later, when resolving, an identifier of the implementation can be passed as parameter to obtain the instance with the correct configuration.
 
 ```swift
 enum MyServices: String {
