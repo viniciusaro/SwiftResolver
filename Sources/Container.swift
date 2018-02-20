@@ -17,13 +17,13 @@ final public class Container {
     public init() {}
     
     @discardableResult
-    public func register<T>(scope: Scope = .instance, _ builder: @escaping Builder0<T>) -> TypeSpecifier {
+    public func register<T>(scope: Scope = .instance, _ builder: @escaping Builder0<T>) -> TypeSpecifier<T> {
         let factory = Factory<T>(scope: scope, builder: builder)
         return self.pool.register(factory)
     }
     
     @discardableResult
-    public func register<T, A>(scope: Scope = .instance, _ builder: @escaping Builder1<T, A>) -> TypeSpecifier {
+    public func register<T, A>(scope: Scope = .instance, _ builder: @escaping Builder1<T, A>) -> TypeSpecifier<T> {
         let factory = Factory<T>(scope: scope) { [unowned self] in
             return try builder((self.pool.instance()))
         }
@@ -31,7 +31,7 @@ final public class Container {
     }
     
     @discardableResult
-    public func register<T, A, B>(scope: Scope = .instance, _ builder: @escaping Builder2<T, A, B>) -> TypeSpecifier {
+    public func register<T, A, B>(scope: Scope = .instance, _ builder: @escaping Builder2<T, A, B>) -> TypeSpecifier<T> {
         let factory = Factory<T>(scope: scope) { [unowned self] in
             return try builder((self.pool.instance(),
                                 self.pool.instance()))
@@ -40,7 +40,7 @@ final public class Container {
     }
     
     @discardableResult
-    public func register<T, A, B, C>(scope: Scope = .instance, _ builder: @escaping Builder3<T, A, B, C>) -> TypeSpecifier {
+    public func register<T, A, B, C>(scope: Scope = .instance, _ builder: @escaping Builder3<T, A, B, C>) -> TypeSpecifier<T> {
         let factory = Factory<T>(scope: scope) { [unowned self] in
             return try builder((self.pool.instance(),
                                 self.pool.instance(),
@@ -50,7 +50,7 @@ final public class Container {
     }
     
     @discardableResult
-    public func register<T, A, B, C, D>(scope: Scope = .instance, _ builder: @escaping Builder4<T, A, B, C, D>) -> TypeSpecifier {
+    public func register<T, A, B, C, D>(scope: Scope = .instance, _ builder: @escaping Builder4<T, A, B, C, D>) -> TypeSpecifier<T> {
         let factory = Factory<T>(scope: scope) { [unowned self] in
             return try builder((self.pool.instance(),
                                 self.pool.instance(),
@@ -61,7 +61,7 @@ final public class Container {
     }
     
     @discardableResult
-    public func register<T, A, B, C, D, E>(scope: Scope = .instance, _ builder: @escaping Builder5<T, A, B, C, D, E>) -> TypeSpecifier {
+    public func register<T, A, B, C, D, E>(scope: Scope = .instance, _ builder: @escaping Builder5<T, A, B, C, D, E>) -> TypeSpecifier<T> {
         let factory = Factory<T>(scope: scope) { [unowned self] in
             return try builder((self.pool.instance(),
                                 self.pool.instance(),

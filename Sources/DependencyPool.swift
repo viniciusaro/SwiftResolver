@@ -1,4 +1,5 @@
 final class DependencyPool {
+    private let typeInterpreter = TypeInterpreter()
     private var factories: Atomic<[String: AnyFactory]> = Atomic([:])
     private var sharedInstances = InstancePool()
     private var singletonInstances = InstancePool()
@@ -33,42 +34,31 @@ final class DependencyPool {
 }
 
 extension DependencyPool {
-    func register<Factory: FactoryType>(_ factory: Factory) -> TypeSpecifier {
-        self.internalRegister(factory)
-        
-        return TypeSpecifier(onRegister: { identifier in
-            self.internalRegister(factory, specificIdentifier: identifier)
+    func register<Factory: FactoryType>(_ factory: Factory) -> TypeSpecifier<Factory.Element> {
+        return TypeSpecifier(register: { identifier in
+            self.internalRegister(factory, identifier: identifier)
         })
     }
     
-    private func internalRegister<Factory: FactoryType>(_ factory: Factory, specificIdentifier: String = "") {
-        let elementTypeIdentifier = String(describing: Factory.Element.self).withoutTypeExtension
-        let typeSpecificIdentifier = specificIdentifier.withoutTypeExtension
-        let identifier = elementTypeIdentifier + typeSpecificIdentifier
-        
+    private func internalRegister<Factory: FactoryType>(_ factory: Factory, identifier: String = "") {
         self.factories.mutate { $0[identifier] = factory.asAny() }
-        if typeSpecificIdentifier.count > 0 {
-            self.factories.mutate { $0[typeSpecificIdentifier] = factory.asAny() }
-        }
     }
 }
 
 extension DependencyPool {
     func instance<T>() throws -> T {
-        let identifier = String(describing: T.self).withoutTypeExtension
+        let identifier = self.typeInterpreter.identifierFor(type: T.self)
         return try self.instance(identifier: identifier)
     }
     
     func instance<T>(tag: String) throws -> T {
-        let elementType = String(describing: T.self).withoutTypeExtension
-        let identifier = elementType + tag
+        let identifier = self.typeInterpreter.identifierFor(type: T.self, andTag: tag)
         return try self.instance(identifier: identifier)
     }
     
     func instance<GenericType, ImplementationType>(_ elementType: ImplementationType) throws -> GenericType {
-        let elementTypeIdentifier = String(describing: ImplementationType.self).withoutTypeExtension
-        let typeSpecificIdentifier = String(describing: GenericType.self).withoutTypeExtension
-        let identifier = elementTypeIdentifier + typeSpecificIdentifier
+        let identifier = self.typeInterpreter.identifierFor(genericType: GenericType.self,
+                                                            andImplementationType: ImplementationType.self)
         return try self.instance(identifier: identifier)
     }
     

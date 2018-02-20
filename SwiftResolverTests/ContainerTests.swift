@@ -3,10 +3,12 @@ import Nimble
 @testable import SwiftResolver
 
 protocol Animal {
+    var name: String { get }
     func makeSound()
 }
 
 final class Cat: Animal {
+    var name: String = ""
     func makeSound() {
         print("Gato")
     }
@@ -52,12 +54,14 @@ class ContainerTests: QuickSpec {
                 container = Container()
             }
             it("should resolve same time with different tags") {
-                container.register { Dog.with(name: "Téo") }.tag(Dogs.teo)
-                container.register { Dog.with(name: "Bob") }.tag(Dogs.bob)
+                container.register { Dog.with(name: "Téo") }.as(Animal.self).tag(Dogs.teo)
+                container.register { Dog.with(name: "Bob") }.as(Animal.self).tag(Dogs.bob)
                 let teo = container.resolve(Dogs.teo) as Dog
                 let bob = container.resolve(Dogs.bob) as Dog
+                let bobAnimal = container.resolve(Dogs.bob) as Animal
                 expect(teo.name).to(equal("Téo"))
                 expect(bob.name).to(equal("Bob"))
+                expect(bobAnimal.name).to(equal("Bob"))
             }
         }
         describe("when registering multiple instances of the same type") {
