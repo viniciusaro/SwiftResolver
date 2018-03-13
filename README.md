@@ -50,7 +50,7 @@ SwiftResolver is thread safe. This means you can register/resolve in different t
 
 However, this is not a good practice since resolving instances that are not registered yet results in a `fatalError`.
 
-Using an AppContainer as described in the [wiki](https://github.com/viniciusaro/SwiftResolver/wiki/Project-Setup) page, with a one time registration process that happens in the application start is recommended.
+It is recommended to use an AppContainer, as described in the [wiki](https://github.com/viniciusaro/SwiftResolver/wiki/Project-Setup) page, a one time registration process.
 
 ## References
 * [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection)
