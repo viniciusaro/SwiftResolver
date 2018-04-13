@@ -54,8 +54,8 @@ class ContainerTests: QuickSpec {
                 container = Container()
             }
             it("should resolve same time with different tags") {
-                container.register { Dog.with(name: "Téo") }.as(Animal.self).tag(Dogs.teo)
-                container.register { Dog.with(name: "Bob") }.as(Animal.self).tag(Dogs.bob)
+                container.register { Dog.with(name: "Téo") }.tag(Dogs.teo).as(Animal.self)
+                container.register { Dog.with(name: "Bob") }.tag(Dogs.bob).as(Animal.self)
                 let teo = container.resolve(Dogs.teo) as Dog
                 let bob = container.resolve(Dogs.bob) as Dog
                 let bobAnimal = container.resolve(Dogs.bob) as Animal
@@ -127,11 +127,11 @@ class ContainerTests: QuickSpec {
                 expect(obj5).to(beAKindOf(Object5.self))
             }
             it("should fail for unregistered type") {
-                expect{ _ = container.resolve() as SomeType }.to(throwAssertion())
+                expect { _ = container.resolve() as SomeType }.to(throwAssertion())
             }
             it("should fail for unregistered dependency") {
                 container.register(SomeType.init)
-                expect{ _ = container.resolve() as SomeType }.to(throwAssertion())
+                expect { _ = container.resolve() as SomeType }.to(throwAssertion())
             }
         }
         describe("when resolving types for") {

@@ -1,85 +1,51 @@
 final public class TypeSpecifier<T> {
-    private let typeInterpreter = TypeInterpreter()
-    private let register: (String) -> Void
+    private let register: (Identifier) -> Void
+    private let asTypeSpecifier: AsTypeSpecifier<T>
+    private var tag: String? = nil
     
-    init(register: @escaping (String) -> Void) {
+    init(register: @escaping (Identifier) -> Void) {
         self.register = register
-        self.typeInterpreter.append(type: T.self)
-        self.register(ids: self.typeInterpreter.identifiers)
+        self.asTypeSpecifier = AsTypeSpecifier(register: register)
+        register(.init(type: T.self))
     }
     
     @discardableResult
-    public func tag(_ tag: String) -> TypeSpecifier<T> {
-        self.typeInterpreter.append(tag: tag)
-        self.register(ids: self.typeInterpreter.identifiers)
-        return self
+    public func tag(_ tag: String) -> AsTypeSpecifier<T> {
+        self.tag = tag
+        self.asTypeSpecifier.tag = tag
+        self.register(.init(tag: tag))
+        self.register(.init(type: T.self, tag: tag))
+        return self.asTypeSpecifier
     }
     
     @discardableResult
-    public func tag<StringRepresentable: RawRepresentable>(_ tag: StringRepresentable) -> TypeSpecifier<T>
-        where StringRepresentable.RawValue == String {
-        self.typeInterpreter.append(tag: tag.rawValue)
-        self.register(ids: self.typeInterpreter.identifiers)
-        return self
-    }
-    
-    @discardableResult
-    public func `as`<GenericType>(_ type: GenericType) -> TypeSpecifier<T> {
-        self.typeInterpreter.append(genericType: GenericType.self)
-        self.register(ids: self.typeInterpreter.identifiers)
-        return self
-    }
-    
-    private func register(ids collection: [String]) {
-        collection.forEach(self.register)
+    public func `as`<GenericType>(_ type: GenericType) -> AsTypeSpecifier<T> {
+        return self.asTypeSpecifier.as(GenericType.self)
     }
 }
 
-final class TypeInterpreter {
-    var identifiers: [String] {
-        return self.combinations2by2(self._identifiers, +)
+final public class AsTypeSpecifier<T> {
+    private let register: (Identifier) -> Void
+    fileprivate(set) var tag: String?
+    
+    init(register: @escaping (Identifier) -> Void) {
+        self.register = register
     }
     
-    private var _identifiers: [String] = []
-    
-    func append<T>(type: T.Type) {
-        self._identifiers.append(String(describing: T.self).withoutTypeExtension)
+    @discardableResult
+    public func `as`<GenericType>(_ type: GenericType) -> Self {
+        self.register(.init(genericType: GenericType.self))
+        self.register(.init(genericType: GenericType.self, tag: self.tag))
+        self.register(.init(type: T.self, genericType: GenericType.self))
+        self.register(.init(type: T.self, genericType: GenericType.self, tag: self.tag))
+        return self
     }
-    
-    func append(tag: String) {
-        self._identifiers.append(tag)
-    }
-    
-    func append<GenericType>(genericType: GenericType.Type) {
-        self._identifiers.append(String(describing: GenericType.self).withoutTypeExtension)
-    }
-    
-    func identifierFor<T>(type: T.Type) -> String {
-        return String(describing: T.self).withoutTypeExtension
-    }
-    
-    func identifierFor<T>(type: T.Type, andTag tag: String) -> String {
-        let elementType = String(describing: T.self).withoutTypeExtension
-        return elementType + tag
-    }
-    
-    func identifierFor<GenericType, ImplementationType>(genericType: GenericType.Type,
-                                                        andImplementationType implementationType: ImplementationType.Type) -> String {
-        let elementTypeIdentifier = String(describing: ImplementationType.self).withoutTypeExtension
-        let typeSpecificIdentifier = String(describing: GenericType.self).withoutTypeExtension
-        return elementTypeIdentifier + typeSpecificIdentifier
-    }
-    
-    private func combinations2by2<T>(_ collection: [T], _ combine: (T, T) -> T) -> [T] {
-        var combinations: [T] = []
-        for i in 0..<collection.count {
-            let value = collection[i]
-            combinations.append(value)
-            for j in i+1..<collection.count {
-                let other = collection[j]
-                combinations.append(combine(value, other))
-            }
-        }
-        return combinations
+}
+
+extension TypeSpecifier {
+    @discardableResult
+    public func tag<StringRepresentable: RawRepresentable>(_ tag: StringRepresentable) -> AsTypeSpecifier<T>
+        where StringRepresentable.RawValue == String {
+            return self.tag(tag.rawValue)
     }
 }

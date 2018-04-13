@@ -1,6 +1,5 @@
 final class DependencyPool {
-    private let typeInterpreter = TypeInterpreter()
-    private var factories: Atomic<[String: AnyFactory]> = Atomic([:])
+    private var factories: Atomic<[Int: AnyFactory]> = Atomic([:])
     private var sharedInstances = InstancePool()
     private var singletonInstances = InstancePool()
     
@@ -25,8 +24,8 @@ final class DependencyPool {
     }
     
     func instanceCountFor<T>(type: T.Type) -> Int {
-        let identifier = String(describing: T.self)
-        guard let factory = self.factories.value[identifier] else {
+        let identifier = Identifier(type: T.self)
+        guard let factory = self.factories.value[identifier.hashValue] else {
             return 0
         }
         return factory.instanceCount
@@ -40,30 +39,30 @@ extension DependencyPool {
         })
     }
     
-    private func internalRegister<Factory: FactoryType>(_ factory: Factory, identifier: String = "") {
-        self.factories.mutate { $0[identifier] = factory.asAny() }
+    private func internalRegister<Factory: FactoryType>(_ factory: Factory, identifier: Identifier) {
+        self.factories.mutate { $0[identifier.hashValue] = factory.asAny() }
     }
 }
 
 extension DependencyPool {
     func instance<T>() throws -> T {
-        let identifier = self.typeInterpreter.identifierFor(type: T.self)
-        return try self.instance(identifier: identifier)
+        return try self.instance(identifier: .init(type: T.self))
     }
     
     func instance<T>(tag: String) throws -> T {
-        let identifier = self.typeInterpreter.identifierFor(type: T.self, andTag: tag)
-        return try self.instance(identifier: identifier)
+        do {
+            return try self.instance(identifier: Identifier(type: T.self, tag: tag))
+        } catch {
+            return try self.instance(identifier: Identifier(genericType: T.self, tag: tag))
+        }
     }
     
     func instance<GenericType, ImplementationType>(_ elementType: ImplementationType) throws -> GenericType {
-        let identifier = self.typeInterpreter.identifierFor(genericType: GenericType.self,
-                                                            andImplementationType: ImplementationType.self)
-        return try self.instance(identifier: identifier)
+        return try self.instance(identifier: .init(type: ImplementationType.self, genericType: GenericType.self))
     }
     
-    private func instance<T>(identifier: String) throws -> T {
-        guard let factory = self.factories.value[identifier],
+    private func instance<T>(identifier: Identifier) throws -> T {
+        guard let factory = self.factories.value[identifier.hashValue],
             let element = try factory.resolve(pool: self) as? T else {
                 throw ContainerError.unregisteredValue(T.self)
         }
