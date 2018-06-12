@@ -8,64 +8,87 @@ final class SomeType {
     }
 }
 
-final class Object0 {}
+final class Child {}
 
-final class Object1 {
-    let dependency: Object0
-    init(dependency: Object0) {
-        self.dependency = dependency
+final class Father {
+    let child: Child
+    init(child: Child) {
+        self.child = child
     }
 }
 
-final class Object2 {
-    let dependency: Object0
-    let dependency2: Object1
-    init(dependency: Object0, dependency2: Object1) {
-        self.dependency = dependency
-        self.dependency2 = dependency2
+final class Mother {
+    let child: Child
+    init(child: Child) {
+        self.child = child
     }
 }
 
-final class Object3 {
-    let dependency: Object0
-    let dependency2: Object1
-    let dependency3: Object2
-    init(dependency: Object0, dependency2: Object1, dependency3: Object2) {
-        self.dependency = dependency
-        self.dependency2 = dependency2
-        self.dependency3 = dependency3
+final class Family {
+    let father: Father
+    let mother: Mother
+    let child: Child
+    init(father: Father, mother: Mother, child: Child) {
+        self.father = father
+        self.mother = mother
+        self.child = child
     }
 }
 
-final class Object4 {
-    let dependency: Object0
-    let dependency2: Object1
-    let dependency3: Object2
-    let dependency4: Object3
-    init(dependency: Object0, dependency2: Object1, dependency3: Object2, dependency4: Object3) {
-        self.dependency = dependency
-        self.dependency2 = dependency2
-        self.dependency3 = dependency3
-        self.dependency4 = dependency4
+final class House {
+    let family: Family
+    let owner: Father
+
+    init(family: Family, owner: Father) {
+        self.family = family
+        self.owner = owner
     }
 }
 
-final class Object5 {
-    let dependency: Object0
-    let dependency2: Object1
-    let dependency3: Object2
-    let dependency4: Object3
-    let dependency5: Object4
-    
-    init(dependency: Object0,
-         dependency2: Object1,
-         dependency3: Object2,
-         dependency4: Object3,
-         dependency5: Object4) {
-        self.dependency = dependency
-        self.dependency2 = dependency2
-        self.dependency3 = dependency3
-        self.dependency4 = dependency4
-        self.dependency5 = dependency5
+final class Street {
+    let house1: House
+    let house2: House
+    let house3: House
+    let house4: House
+    let house5: House
+
+    init(house1: House,
+         house2: House,
+         house3: House,
+         house4: House,
+         house5: House) {
+        self.house1 = house1
+        self.house2 = house2
+        self.house3 = house3
+        self.house4 = house4
+        self.house5 = house5
     }
+}
+
+protocol Animal {
+    func makeSound()
+}
+
+final class Cat: Animal {
+    func makeSound() {
+        print("Gato")
+    }
+}
+
+final class Dog: Animal {
+    var name: String = ""
+    func makeSound() {
+        print("Cachoro")
+    }
+
+    static func with(name: String) -> Dog {
+        let dog = Dog()
+        dog.name = name
+        return dog
+    }
+}
+
+enum Dogs: String {
+    case teo
+    case bob
 }
