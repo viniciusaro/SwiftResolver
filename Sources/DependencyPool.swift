@@ -3,22 +3,6 @@ final class DependencyPool {
     private var sharedInstances = InstancePool()
     private var singletonInstances = InstancePool()
     
-    func sharedInstance<T>() -> T? {
-        return self.sharedInstances.get()
-    }
-    
-    func singletonInstance<T>() -> T? {
-        return self.singletonInstances.get()
-    }
-    
-    func registerShared<T>(instance: T) {
-        self.sharedInstances.register(instance: instance)
-    }
-    
-    func registerSingleton<T>(instance: T) {
-        self.singletonInstances.register(instance: instance)
-    }
-    
     func clearShared() {
         self.sharedInstances.clear()
     }
@@ -73,10 +57,45 @@ extension DependencyPool {
     }
     
     private func instance<T>(identifier: String) throws -> T {
-        guard let factory = self.factories.value[identifier],
-            let element = try factory.resolve(pool: self) as? T else {
-                throw ContainerError.unregisteredValue(T.self)
+        guard let factory = self.factories.value[identifier] else {
+            throw ContainerError.unregisteredValue(T.self)
         }
+
+        switch factory.scope {
+        case .instance: return try self.buildInstance(with: factory)
+        case .shared: return try self.buildSharedInstance(with: factory)
+        case .singleton: return try self.buildSingletonInstance(with: factory)
+        }
+    }
+}
+
+extension DependencyPool {
+    private func buildInstance<T>(with factory: AnyFactory) throws -> T {
+        guard let element = try factory.build() as? T else {
+            throw ContainerError.unregisteredValue(T.self)
+        }
+        return element
+    }
+
+    private func buildSharedInstance<T>(with factory: AnyFactory) throws -> T {
+        if let element: T = self.sharedInstances.get() {
+            return element
+        }
+        guard let element = try factory.build() as? T else {
+            throw ContainerError.unregisteredValue(T.self)
+        }
+        self.sharedInstances.register(instance: element)
+        return element
+    }
+
+    private func buildSingletonInstance<T>(with factory: AnyFactory) throws -> T {
+        if let element: T = self.singletonInstances.get() {
+            return element
+        }
+        guard let element = try factory.build() as? T else {
+            throw ContainerError.unregisteredValue(T.self)
+        }
+        self.singletonInstances.register(instance: element)
         return element
     }
 }

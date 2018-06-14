@@ -1,7 +1,8 @@
 protocol FactoryType {
     associatedtype Element
-    func resolve(pool: DependencyPool) throws -> Element
+    var scope: Scope { get }
     var instanceCount: Int { get }
+    func build() throws -> Element
 }
 
 extension FactoryType {
@@ -11,19 +12,21 @@ extension FactoryType {
 }
 
 final class AnyFactory: FactoryType {
-    private let resolver: (DependencyPool) throws -> Any
+    let scope: Scope
+    private let buildClosure: () throws -> Any
     private let instanceCountClosure: () -> Int
-    
+
     var instanceCount: Int {
         return self.instanceCountClosure()
     }
     
     init<Factory: FactoryType>(factory: Factory) {
-        self.resolver = factory.resolve
+        self.buildClosure = factory.build
         self.instanceCountClosure = { factory.instanceCount }
+        self.scope = factory.scope
     }
     
-    func resolve(pool: DependencyPool) throws -> Any {
-        return try self.resolver(pool)
+    func build() throws -> Any {
+        return try self.buildClosure()
     }
 }

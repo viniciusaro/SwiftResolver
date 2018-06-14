@@ -11,11 +11,13 @@ class ContainerTests: QuickSpec {
                 container.register(scope: .instance, Child.init)
                 container.register(scope: .shared, Father.init)
                 container.register(scope: .singleton, Mother.init)
+                container.register(Family.init)
                 container.register(House.init)
                 container.register(Street.init)
                 _ = container.resolve() as Child
                 _ = container.resolve() as Father
                 _ = container.resolve() as Mother
+                _ = container.resolve() as Family
                 _ = container.resolve() as House
                 _ = container.resolve() as Street
                 container = nil
@@ -153,6 +155,26 @@ class ContainerTests: QuickSpec {
 
                     expect(container.instanceCountFor(Child.self)).to(equal(2))
                     expect(expression: { father.child !== mother.child }).to(beTrue())
+                }
+                it("should use new dependency graph if resolver is called") {
+                    container.register(scope: .shared, Child.init)
+                    container.register(scope: .shared, Father.init)
+                    container.register(Mother.init)
+                    
+                    container.register { Family(father: container.resolve(),
+                                                mother: container.resolve(),
+                                                child: container.resolve()) }
+
+                    container.register(House.init)
+
+                    let family = container.resolve() as Family
+                    let house = container.resolve() as House
+                    
+                    expect(expression: { family.father.child !== family.mother.child }).to(beTrue())
+                    expect(expression: { family.child !== family.mother.child }).to(beTrue())
+                    expect(expression: { family.child !== family.father.child }).to(beTrue())
+                    expect(expression: { house.family.father !== house.owner }).to(beTrue())
+                    expect(expression: { house.family.father.child !== house.owner.child }).to(beTrue())
                 }
             }
             describe("singleton scope") {

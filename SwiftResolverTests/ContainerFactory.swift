@@ -39,7 +39,7 @@ final class House {
     let family: Family
     let owner: Father
 
-    init(family: Family, owner: Father) {
+    init(owner: Father, family: Family) {
         self.family = family
         self.owner = owner
     }

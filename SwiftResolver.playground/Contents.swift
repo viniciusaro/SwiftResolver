@@ -1,31 +1,51 @@
 import SwiftResolver
 
-protocol Animal {
-    func makeSound()
+protocol Human {
+
 }
 
-final class Cat: Animal {
-    func makeSound() {
-        print("Gato")
+final class Child {}
+
+final class Father: Human {
+    let child: Child
+    init(child: Child) {
+        self.child = child
     }
 }
 
-final class Dog: Animal {
-    func makeSound() {
-        print("Cachoro")
+final class Mother: Human {
+    let child: Child
+    init(child: Child) {
+        self.child = child
+    }
+}
+
+final class Family {
+    let father: Father
+    let mother: Mother
+    let child: Child
+    init(father: Father, mother: Mother, child: Child) {
+        self.father = father
+        self.mother = mother
+        self.child = child
     }
 }
 
 let container = Container()
-container.register { Cat() }.as(Animal.self)
 
-let animal: Animal = container.resolve(Cat.self)
-animal.makeSound()
+container.register(scope: .shared) { Child() }
+container.register { Father(child: $0) }.as(Human.self)
+container.register { Mother(child: $0) }.as(Human.self)
+container.register { Family(father: $0, mother: $1, child: $2) }
 
-//final class A {
-//    let animal: Animal
-//    init(animal: Animal) {
-//        self.animal = animal
-//    }
-//}
+let father = container.resolve() as Father
+let human: Human = container.resolve(Mother.self)
+
+let family = container.resolve() as Family
+family.father.child === family.child
+family.mother.child === family.child
+family.mother.child === family.father.child
+
+let family2 = container.resolve() as Family
+family.child === family2.child
 

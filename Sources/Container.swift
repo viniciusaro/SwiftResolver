@@ -90,8 +90,8 @@ final public class Container {
     
     private func resolve<T>(_ resolverMethod: () throws -> T) -> T {
         do {
-            let instance = try resolverMethod() as T
             self.pool.clearShared()
+            let instance = try resolverMethod() as T
             return instance
         } catch let error as ContainerError<T> {
             fatalError(error.localizedDescription)
