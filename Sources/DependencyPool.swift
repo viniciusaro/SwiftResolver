@@ -64,7 +64,7 @@ extension DependencyPool {
         switch factory.scope {
         case .instance: return try self.buildInstance(with: factory)
         case .shared: return try self.buildSharedInstance(with: factory)
-        case .singleton: return try self.buildSingletonInstance(with: factory)
+        case .singleton, .eagerSingleton: return try self.buildSingletonInstance(with: factory)
         }
     }
 }

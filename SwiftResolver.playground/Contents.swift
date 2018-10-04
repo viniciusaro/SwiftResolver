@@ -31,12 +31,12 @@ final class Family {
     }
 }
 
-let container = Container()
-
-container.register(scope: .shared) { Child() }
-container.register { Father(child: $0) }.as(Human.self)
-container.register { Mother(child: $0) }.as(Human.self)
-container.register { Family(father: $0, mother: $1, child: $2) }
+let container = Container { registrant in
+    registrant.register(scope: .shared) { Child() }
+    registrant.register { Father(child: $0) }.as(Human.self)
+    registrant.register { Mother(child: $0) }.as(Human.self)
+    registrant.register { Family(father: $0, mother: $1, child: $2) }
+}
 
 let father = container.resolve() as Father
 let human: Human = container.resolve(Mother.self)

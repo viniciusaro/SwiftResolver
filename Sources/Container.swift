@@ -1,10 +1,54 @@
 public enum Scope {
     case instance
-    case singleton
     case shared
+    case singleton
+    case eagerSingleton
 }
 
 final public class Container {
+    public typealias RegistrantBlock = (Registrant) -> Void
+    
+    private let pool = DependencyPool()
+    private lazy var registrant = Registrant(pool: self.pool)
+    
+    public init(registrant: RegistrantBlock) {
+        registrant(self.registrant)
+    }
+    
+    public func resolve<T>() -> T {
+        return self.resolve { try self.pool.instance() }
+    }
+    
+    public func resolve<T, Specifier>(_ specificType: Specifier) -> T {
+        return self.resolve { try self.pool.instance(specificType) }
+    }
+    
+    public func resolve<T>(_ tag: String) -> T {
+        return self.resolve { try self.pool.instance(tag: tag) }
+    }
+    
+    public func resolve<T, StringRepresentable: RawRepresentable>(_ tag: StringRepresentable) -> T where StringRepresentable.RawValue == String {
+        return self.resolve { try self.pool.instance(tag: tag.rawValue) }
+    }
+    
+    private func resolve<T>(_ resolverMethod: () throws -> T) -> T {
+        do {
+            self.pool.clearShared()
+            let instance = try resolverMethod() as T
+            return instance
+        } catch let error as ContainerError<T> {
+            fatalError(error.localizedDescription)
+        } catch {
+            fatalError("Unregistered type \(T.self)")
+        }
+    }
+    
+    public func instanceCountFor<T>(_ type: T.Type) -> Int {
+        return self.pool.instanceCountFor(type: T.self)
+    }
+}
+
+final public class Registrant {
     public typealias Builder0<T> = () -> T
     public typealias Builder1<T, A> = ((A)) -> T
     public typealias Builder2<T, A, B> = ((A, B)) -> T
@@ -12,9 +56,11 @@ final public class Container {
     public typealias Builder4<T, A, B, C, D> = ((A, B, C, D)) -> T
     public typealias Builder5<T, A, B, C, D, E> = ((A, B, C, D, E)) -> T
     
-    private let pool = DependencyPool()
+    private unowned let pool: DependencyPool
     
-    public init() {}
+    fileprivate init(pool: DependencyPool) {
+        self.pool = pool
+    }
     
     @discardableResult
     public func register<T>(scope: Scope = .instance, _ builder: @escaping Builder0<T>) -> TypeSpecifier {
@@ -70,37 +116,5 @@ final public class Container {
                                 self.pool.instance()))
         }
         return self.pool.register(factory)
-    }
-    
-    public func resolve<T>() -> T {
-        return self.resolve { try self.pool.instance() }
-    }
-    
-    public func resolve<T, Specifier>(_ specificType: Specifier) -> T {
-        return self.resolve { try self.pool.instance(specificType) }
-    }
-    
-    public func resolve<T>(_ tag: String) -> T {
-        return self.resolve { try self.pool.instance(tag: tag) }
-    }
-    
-    public func resolve<T, StringRepresentable: RawRepresentable>(_ tag: StringRepresentable) -> T where StringRepresentable.RawValue == String {
-        return self.resolve { try self.pool.instance(tag: tag.rawValue) }
-    }
-    
-    private func resolve<T>(_ resolverMethod: () throws -> T) -> T {
-        do {
-            self.pool.clearShared()
-            let instance = try resolverMethod() as T
-            return instance
-        } catch let error as ContainerError<T> {
-            fatalError(error.localizedDescription)
-        } catch {
-            fatalError("Unregistered type \(T.self)")
-        }
-    }
-    
-    public func instanceCountFor<T>(_ type: T.Type) -> Int {
-        return self.pool.instanceCountFor(type: T.self)
     }
 }
