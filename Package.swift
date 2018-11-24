@@ -17,7 +17,7 @@ let package = Package(
         .target(
             name: "SwiftResolver",
             dependencies: [],
-            path: "SwiftResolver",
-            sources: ["SwiftResolver/Sources"]),
+            path: ".",
+            sources: ["Sources"]),
     ]
 )
