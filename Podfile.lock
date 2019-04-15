@@ -1,14 +1,14 @@
 PODS:
-  - Nimble (7.0.2)
-  - Quick (1.2.0)
+  - Nimble (8.0.1)
+  - Quick (2.0.0)
 
 DEPENDENCIES:
   - Nimble
   - Quick
 
 SPEC CHECKSUMS:
-  Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
-  Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
+  Nimble: 45f786ae66faa9a709624227fae502db55a8bdd0
+  Quick: ce1276c7c27ba2da3cb2fd0cde053c3648b3b22d
 
 PODFILE CHECKSUM: 9381a1db6b8d60326a352bec7191252c36f4ba5f
 

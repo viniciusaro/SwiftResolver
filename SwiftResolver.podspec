@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "SwiftResolver"
-  s.version          = "1.0.10"
+  s.version          = "1.0.11"
   s.summary          = "Dependency injection framework for Swift."
 
   s.description      = <<-DESC

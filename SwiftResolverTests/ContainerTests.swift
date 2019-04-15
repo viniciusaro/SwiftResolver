@@ -160,7 +160,7 @@ class ContainerTests: QuickSpec {
                     container.register(scope: .shared, Child.init)
                     container.register(scope: .shared, Father.init)
                     container.register(Mother.init)
-                    
+
                     container.register { Family(father: container.resolve(),
                                                 mother: container.resolve(),
                                                 child: container.resolve()) }
@@ -169,7 +169,7 @@ class ContainerTests: QuickSpec {
 
                     let family = container.resolve() as Family
                     let house = container.resolve() as House
-                    
+
                     expect(expression: { family.father.child !== family.mother.child }).to(beTrue())
                     expect(expression: { family.child !== family.mother.child }).to(beTrue())
                     expect(expression: { family.child !== family.father.child }).to(beTrue())

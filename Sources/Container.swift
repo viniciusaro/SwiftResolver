@@ -5,8 +5,8 @@ public enum Scope {
 }
 
 final public class Container {
-    public typealias Builder0<T> = () -> T
-    public typealias Builder1<T, A> = ((A)) -> T
+    public typealias Builder0<T> = (()) -> T
+    public typealias Builder1<T, A> = (A) -> T
     public typealias Builder2<T, A, B> = ((A, B)) -> T
     public typealias Builder3<T, A, B, C> = ((A, B, C)) -> T
     public typealias Builder4<T, A, B, C, D> = ((A, B, C, D)) -> T
@@ -18,7 +18,9 @@ final public class Container {
     
     @discardableResult
     public func register<T>(scope: Scope = .instance, _ builder: @escaping Builder0<T>) -> TypeSpecifier {
-        let factory = Factory<T>(scope: scope, builder: builder)
+        let factory = Factory<T>(scope: scope) {
+            builder(())
+        }
         return self.pool.register(factory)
     }
     
@@ -38,7 +40,7 @@ final public class Container {
         }
         return self.pool.register(factory)
     }
-    
+
     @discardableResult
     public func register<T, A, B, C>(scope: Scope = .instance, _ builder: @escaping Builder3<T, A, B, C>) -> TypeSpecifier {
         let factory = Factory<T>(scope: scope) { [unowned self] in
